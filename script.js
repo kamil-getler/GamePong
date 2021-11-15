@@ -7,7 +7,7 @@ canvas.height = 500;
 const cw = canvas.width;
 const ch = canvas.height;
 
-const ballSize = 20;
+const ballSize = 15;
 let ballx = cw/2 -ballSize/2;
 let bally =  ch/2 -ballSize/2;
 
@@ -19,6 +19,11 @@ const aix = 910;
 
 let playery = 70;
 let aiy = 70;
+
+//Punkty
+
+let sp =0;   
+let sa =0;
 
 ///Funkcje
 
@@ -33,33 +38,58 @@ ctx.fillRect(playerx, playery, 10, 100);
  
 
 function ball (){
-    ctx.fillStyle = 'white';
-    ctx.fillRect(ballx, bally, ballSize, ballSize);
+    ctx.beginPath();
+    ctx.fillStyle = 'rgb(20,59,200)';
+    ctx.arc(ballx, bally, ballSize, 0, 2 * Math.PI);
+    ctx.fill();
     ballx += ballSpeedx
     bally += ballSpeedy
     
-    if(bally <=0 || bally + ballSize >= ch){
+    if(bally-ballSize <=0 || bally+ballSize >= ch){
         ballSpeedy = -ballSpeedy;
+        
     }
+
 
     if(ballx <=0 || ballx+ballSize >= cw){
             ballSpeedx = -ballSpeedx ;  
 
     }
-    ////interakcja AI
-    if (ballx <= playerx) {
-        ballx =-ballx;
-        }
-        ////interakcaja player
+    ////interakcja PLAYER
+}
+
+  function playerball(){  
+    if (ballx <= playerx ) {
+        if(bally <=playery+100 && bally>=playery)
+          ballSpeedx =-ballSpeedx ;
+          
+    }
+}
+
+function AIXBALL (){
+        ////interakcaja AIX
         if (ballx+20 >=aix) {
-            ballx =-ballx;
-            console.log(ballx)
+            if(bally <=aiy+100 && bally>=aiy){
+               ballSpeedx =-ballSpeedx ;
+            }
 
         }
 }
+function score () {
+ 
+ctx.font = "italic bold 50px Arial";
+ctx.fillText(sp +":"+ sa, (cw/2)-20, ch/2);
 
+if(ballx<=0){
+sp+=1;
+}
+if(ballx+ballSize>=cw){
+    sa+=1;
+}
+
+}
 function iQ (){
-           if(bally<=400){
+           if(bally+100<=500){   
             aiy=bally;
              }
             
@@ -67,7 +97,7 @@ function iQ (){
 
         
         
-        
+             
 function table() {
 
 ctx.fillStyle = 'black';
@@ -96,7 +126,10 @@ player();
 AI();
 iQ();
 ball();
+playerball();
+AIXBALL();
+score();
 
 }
 
-setInterval(game,50);
+setInterval(game,40);
